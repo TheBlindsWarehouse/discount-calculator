@@ -127,22 +127,7 @@
             text-align: center;
         }
         
-        .discount-display {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        
-        .discount-amount {
-            font-size: 3em;
-            font-weight: 900;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-        }
-        
-        .discount-percentage {
-            font-size: 1.5em;
-            opacity: 0.9;
-        }
+
         
         .breakdown {
             display: grid;
@@ -244,25 +229,25 @@
         <div id="results" class="results" style="display: none;">
             <h2>Discount Authorization Levels</h2>
             
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-bottom: 30px;">
-                <div style="background: rgba(46, 204, 113, 0.2); padding: 25px; border-radius: 15px; border: 2px solid #2ecc71;">
+            <div class="discount-levels">
+                <div class="discount-card standard-card">
                     <h3 style="margin-bottom: 15px; color: #27ae60;">✅ Standard Discount</h3>
-                    <div class="discount-amount" style="font-size: 2.2em; margin-bottom: 10px;" id="standardDiscountAmount">£0.00</div>
-                    <div class="discount-percentage" style="font-size: 1.2em; margin-bottom: 15px;" id="standardDiscountPercent">0%</div>
-                    <div style="background: rgba(255, 255, 255, 0.3); padding: 12px; border-radius: 8px;">
+                    <div class="discount-amount" id="standardDiscountAmount">£0.00</div>
+                    <div class="discount-percentage" id="standardDiscountPercent">0%</div>
+                    <div class="final-price-box">
                         <strong>Final Price: <span id="standardFinalPrice">£0.00</span></strong>
                     </div>
                 </div>
                 
-                <div style="background: rgba(255, 193, 7, 0.2); padding: 25px; border-radius: 15px; border: 2px solid #f39c12;">
+                <div class="discount-card maximum-card">
                     <h3 style="margin-bottom: 15px; color: #e67e22;">⚠️ Maximum Discount</h3>
-                    <p style="font-size: 0.9em; margin-bottom: 15px; opacity: 0.8;">Only if required to close the sale</p>
-                    <div class="discount-amount" style="font-size: 2.2em; margin-bottom: 10px;" id="maxDiscountAmount">£0.00</div>
-                    <div class="discount-percentage" style="font-size: 1.2em; margin-bottom: 15px;" id="maxDiscountPercent">0%</div>
-                    <div style="background: rgba(255, 255, 255, 0.3); padding: 12px; border-radius: 8px; margin-bottom: 12px;">
+                    <p class="subtitle-text">Only if required to close the sale</p>
+                    <div class="discount-amount" id="maxDiscountAmount">£0.00</div>
+                    <div class="discount-percentage" id="maxDiscountPercent">0%</div>
+                    <div class="final-price-box" style="margin-bottom: 12px;">
                         <strong>Final Price: <span id="maxFinalPrice">£0.00</span></strong>
                     </div>
-                    <div style="background: rgba(231, 76, 60, 0.2); padding: 10px; border-radius: 6px; font-size: 0.85em; text-align: center; color: #c0392b; font-weight: 600;">
+                    <div class="contact-notice">
                         Contact Adam for anything more than this
                     </div>
                 </div>
