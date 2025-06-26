@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maximum Discount Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            padding: 35px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 2.5em;
+            background: linear-gradient(45deg, #1e3c72, #2a5298);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 35px;
+            font-size: 1.1em;
+        }
+        
+        .calculator-section {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 25px;
+        }
+        
+        .input-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .input-group {
+            position: relative;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #444;
+            font-size: 1em;
+        }
+        
+        select, input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e0e6ed;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #fafbfc;
+        }
+        
+        select:focus, input:focus {
+            outline: none;
+            border-color: #2a5298;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(42, 82, 152, 0.1);
+        }
+        
+        .calculate-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(45deg, #1e3c72, #2a5298);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .calculate-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(42, 82, 152, 0.3);
+        }
+        
+        .calculate-btn:active {
+            transform: translateY(-1px);
+        }
+        
+        .results {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            margin-top: 25px;
+        }
+        
+        .results h2 {
+            margin-bottom: 25px;
+            font-size: 1.8em;
+            text-align: center;
+        }
+        
+        .discount-display {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .discount-amount {
+            font-size: 3em;
+            font-weight: 900;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .discount-percentage {
+            font-size: 1.5em;
+            opacity: 0.9;
+        }
+        
+        .breakdown {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .breakdown-item {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 18px;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            text-align: center;
+        }
+        
+        .breakdown-item strong {
+            display: block;
+            font-size: 1.1em;
+            margin-bottom: 8px;
+        }
+        
+        .breakdown-item span {
+            font-size: 1.3em;
+            font-weight: 600;
+        }
+        
+        .warning {
+            background: rgba(255, 107, 107, 0.2);
+            border: 2px solid #ff6b6b;
+            color: #c92a2a;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                padding: 25px;
+            }
+            
+            .discount-amount {
+                font-size: 2.5em;
+            }
+            
+            .input-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Maximum Discount Calculator</h1>
+        <p class="subtitle">If discounts are necessary, use this for calculating the maximum discounts allowable for each product type.</p>
+        
+
+        
+        <div class="calculator-section">
+            <div class="input-grid">
+                <div class="input-group">
+                    <label for="blindType">Blind Type</label>
+                    <select id="blindType" onchange="updateMarginInfo()">
+                        <option value="fauxwoods" data-margin="65">Fauxwoods</option>
+                        <option value="sherwood" data-margin="62">Sherwood</option>
+                        <option value="bamboo" data-margin="62">Bamboo</option>
+                        <option value="metal-venetian" data-margin="64">Metal Venetian</option>
+                        <option value="perfect-fit-venetians" data-margin="66">Perfect Fit Venetians</option>
+                        <option value="rollers" data-margin="68">Rollers</option>
+                        <option value="rollers-elements" data-margin="60">Rollers (Elements)</option>
+                        <option value="verticals" data-margin="63">Verticals</option>
+                        <option value="verticals-elements" data-margin="63">Verticals (Elements)</option>
+                        <option value="pleated" data-margin="65">Pleated</option>
+                        <option value="pleated-perfect-fit" data-margin="65">Pleated Perfect Fit</option>
+                        <option value="curtains" data-margin="60">Curtains</option>
+                        <option value="romans" data-margin="64">Romans</option>
+                        <option value="dual-shade" data-margin="63">Dual Shade</option>
+                        <option value="diffused" data-margin="63">Diffused</option>
+                        <option value="shutters" data-margin="50">Shutters</option>
+                        <option value="motorised" data-margin="50">Motorised Blinds</option>
+                        <option value="mixed" data-margin="50">MIXED</option>
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <label for="sellingPrice">Original Selling Price (Inc VAT) (£)</label>
+                    <input type="number" id="sellingPrice" placeholder="e.g., 1800" step="0.01" min="0">
+                </div>
+            </div>
+            
+            <button class="calculate-btn" onclick="calculateMaxDiscount()">Calculate Discount Authorization</button>
+        </div>
+        
+        <div id="results" class="results" style="display: none;">
+            <h2>Discount Authorization Levels</h2>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-bottom: 30px;">
+                <div style="background: rgba(46, 204, 113, 0.2); padding: 25px; border-radius: 15px; border: 2px solid #2ecc71;">
+                    <h3 style="margin-bottom: 15px; color: #27ae60;">✅ Standard Discount</h3>
+                    <div class="discount-amount" style="font-size: 2.2em; margin-bottom: 10px;" id="standardDiscountAmount">£0.00</div>
+                    <div class="discount-percentage" style="font-size: 1.2em; margin-bottom: 15px;" id="standardDiscountPercent">0%</div>
+                    <div style="background: rgba(255, 255, 255, 0.3); padding: 12px; border-radius: 8px;">
+                        <strong>Final Price: <span id="standardFinalPrice">£0.00</span></strong>
+                    </div>
+                </div>
+                
+                <div style="background: rgba(255, 193, 7, 0.2); padding: 25px; border-radius: 15px; border: 2px solid #f39c12;">
+                    <h3 style="margin-bottom: 15px; color: #e67e22;">⚠️ Maximum Discount</h3>
+                    <p style="font-size: 0.9em; margin-bottom: 15px; opacity: 0.8;">Only if required to close the sale</p>
+                    <div class="discount-amount" style="font-size: 2.2em; margin-bottom: 10px;" id="maxDiscountAmount">£0.00</div>
+                    <div class="discount-percentage" style="font-size: 1.2em; margin-bottom: 15px;" id="maxDiscountPercent">0%</div>
+                    <div style="background: rgba(255, 255, 255, 0.3); padding: 12px; border-radius: 8px; margin-bottom: 12px;">
+                        <strong>Final Price: <span id="maxFinalPrice">£0.00</span></strong>
+                    </div>
+                    <div style="background: rgba(231, 76, 60, 0.2); padding: 10px; border-radius: 6px; font-size: 0.85em; text-align: center; color: #c0392b; font-weight: 600;">
+                        Contact Adam for anything more than this
+                    </div>
+                </div>
+            </div>
+            
+            <div class="breakdown">
+                <div class="breakdown-item">
+                    <strong>Original Price</strong>
+                    <span id="originalPrice">£0.00</span><br>
+                    <small><span id="originalPriceExVAT">£0.00</span></small>
+                </div>
+            </div>
+            
+            <div style="background: rgba(255, 255, 255, 0.15); padding: 20px; border-radius: 12px; margin-top: 20px;">
+                <h4 style="margin-bottom: 15px; text-align: center;">VAT Breakdown</h4>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; font-size: 0.9em;">
+                    <div>
+                        <strong>Standard Discount:</strong><br>
+                        <span id="standardDiscountExVAT">£0.00</span><br>
+                        <strong>Final Price:</strong><br>
+                        <span id="standardFinalPriceExVAT">£0.00</span>
+                    </div>
+                    <div>
+                        <strong>Maximum Discount:</strong><br>
+                        <span id="maxDiscountExVAT">£0.00</span><br>
+                        <strong>Final Price:</strong><br>
+                        <span id="maxFinalPriceExVAT">£0.00</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="warning" class="warning" style="display: none;">
+                ⚠️ Warning: This order would result in a loss even without any discount!
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function updateMarginInfo() {
+            // Recalculate if there's already a price entered
+            if (document.getElementById('sellingPrice').value) {
+                calculateMaxDiscount();
+            }
+        }
+        
+        function calculateMaxDiscount() {
+            const sellingPriceIncVAT = parseFloat(document.getElementById('sellingPrice').value);
+            const blindType = document.getElementById('blindType');
+            const margin = parseFloat(blindType.options[blindType.selectedIndex].getAttribute('data-margin'));
+            
+            // Fixed values
+            const commission = 0.05; // 5% fixed
+            const fixedCosts = 460; // £460 fixed
+            const minProfit = 100; // £100 fixed
+            const vatRate = 0.2; // 20% VAT
+            
+            if (isNaN(sellingPriceIncVAT) || sellingPriceIncVAT <= 0) {
+                alert('Please enter a valid selling price');
+                return;
+            }
+            
+            // Convert to VAT-exclusive for calculations
+            const sellingPriceExVAT = sellingPriceIncVAT / (1 + vatRate);
+            
+            // Calculate cost of sales (based on ex VAT price)
+            const costPercentage = (100 - margin) / 100;
+            const costOfSales = sellingPriceExVAT * costPercentage;
+            
+            // Calculate minimum revenue needed to break even (ex VAT)
+            const minRevenue = (costOfSales + fixedCosts + minProfit) / (1 - commission);
+            
+            // Calculate maximum discount (business logic) - ex VAT
+            const maxDiscountBusinessExVAT = Math.max(0, sellingPriceExVAT - minRevenue);
+            
+            // Apply caps for both levels (ex VAT)
+            const standardDiscountExVAT = Math.min(maxDiscountBusinessExVAT, sellingPriceExVAT * 0.05); // 5% cap
+            const maxDiscountExVAT = Math.min(maxDiscountBusinessExVAT, sellingPriceExVAT * 0.10); // 10% cap
+            
+            // Convert discounts to include VAT
+            const standardDiscountIncVAT = standardDiscountExVAT * (1 + vatRate);
+            const maxDiscountIncVAT = maxDiscountExVAT * (1 + vatRate);
+            
+            // Calculate percentages (based on inc VAT prices)
+            const standardDiscountPercent = (standardDiscountIncVAT / sellingPriceIncVAT) * 100;
+            const maxDiscountPercent = (maxDiscountIncVAT / sellingPriceIncVAT) * 100;
+            
+            // Calculate final prices
+            const standardFinalPriceExVAT = sellingPriceExVAT - standardDiscountExVAT;
+            const standardFinalPriceIncVAT = sellingPriceIncVAT - standardDiscountIncVAT;
+            const maxFinalPriceExVAT = sellingPriceExVAT - maxDiscountExVAT;
+            const maxFinalPriceIncVAT = sellingPriceIncVAT - maxDiscountIncVAT;
+            
+            // Update UI
+            document.getElementById('standardDiscountAmount').textContent = `£${standardDiscountIncVAT.toFixed(2)}`;
+            document.getElementById('standardDiscountPercent').textContent = `${standardDiscountPercent.toFixed(1)}%`;
+            document.getElementById('standardFinalPrice').textContent = `£${standardFinalPriceIncVAT.toFixed(2)} (Inc VAT)`;
+            
+            document.getElementById('maxDiscountAmount').textContent = `£${maxDiscountIncVAT.toFixed(2)}`;
+            document.getElementById('maxDiscountPercent').textContent = `${maxDiscountPercent.toFixed(1)}%`;
+            document.getElementById('maxFinalPrice').textContent = `£${maxFinalPriceIncVAT.toFixed(2)} (Inc VAT)`;
+            
+            document.getElementById('originalPrice').textContent = `£${sellingPriceIncVAT.toFixed(2)} (Inc VAT)`;
+            
+            // Add ex VAT breakdown
+            document.getElementById('originalPriceExVAT').textContent = `£${sellingPriceExVAT.toFixed(2)} (Ex VAT)`;
+            document.getElementById('standardDiscountExVAT').textContent = `£${standardDiscountExVAT.toFixed(2)} (Ex VAT)`;
+            document.getElementById('maxDiscountExVAT').textContent = `£${maxDiscountExVAT.toFixed(2)} (Ex VAT)`;
+            document.getElementById('standardFinalPriceExVAT').textContent = `£${standardFinalPriceExVAT.toFixed(2)} (Ex VAT)`;
+            document.getElementById('maxFinalPriceExVAT').textContent = `£${maxFinalPriceExVAT.toFixed(2)} (Ex VAT)`;
+            
+            // Show warning if order would be unprofitable
+            const warningDiv = document.getElementById('warning');
+            if (maxDiscountBusinessExVAT <= 0) {
+                warningDiv.style.display = 'block';
+            } else {
+                warningDiv.style.display = 'none';
+            }
+            
+            document.getElementById('results').style.display = 'block';
+        }
+        
+        // Initialize margin info
+        updateMarginInfo();
+        
+        // Add event listeners for real-time calculation
+        document.getElementById('sellingPrice').addEventListener('input', function() {
+            if (this.value) calculateMaxDiscount();
+        });
+    </script>
+</body>
+</html>
