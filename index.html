@@ -125,6 +125,46 @@
             transform: translateY(-1px);
         }
         
+        .threshold-section {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 25px;
+        }
+        
+        .threshold-section h2 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            font-size: 1.6em;
+        }
+        
+        .threshold-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+        }
+        
+        .threshold-card {
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            border: 2px solid;
+        }
+        
+        .threshold-5 {
+            background: rgba(46, 204, 113, 0.1);
+            border-color: #2ecc71;
+        }
+        
+        .threshold-amount {
+            font-size: 2em;
+            font-weight: 900;
+            margin: 10px 0;
+            color: #27ae60;
+        }
+        
         .results {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -139,28 +179,15 @@
             text-align: center;
         }
         
-        .discount-levels {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            margin-bottom: 25px;
-        }
-        
         .discount-card {
-            padding: 25px;
+            padding: 30px;
             border-radius: 15px;
             backdrop-filter: blur(10px);
             text-align: center;
-        }
-        
-        .standard-card {
             background: rgba(46, 204, 113, 0.2);
             border: 2px solid #2ecc71;
-        }
-        
-        .maximum-card {
-            background: rgba(255, 193, 7, 0.2);
-            border: 2px solid #f39c12;
+            max-width: 500px;
+            margin: 0 auto;
         }
         
         .discount-amount {
@@ -174,12 +201,6 @@
             font-size: 1.2em;
             margin-bottom: 15px;
             opacity: 0.9;
-        }
-        
-        .subtitle-text {
-            font-size: 0.85em;
-            margin-bottom: 12px;
-            opacity: 0.8;
         }
         
         .price-summary {
@@ -205,15 +226,6 @@
             font-size: 1em;
         }
         
-        .contact-notice {
-            background: rgba(231, 76, 60, 0.2);
-            padding: 10px;
-            border-radius: 6px;
-            font-size: 0.8em;
-            color: #c0392b;
-            font-weight: 600;
-        }
-        
         .warning {
             background: rgba(255, 107, 107, 0.2);
             border: 2px solid #ff6b6b;
@@ -225,10 +237,32 @@
             font-weight: 600;
         }
         
+        .vat-breakdown {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+        }
+        
+        .vat-breakdown h4 {
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .vat-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            font-size: 0.9em;
+        }
+        
         @media (max-width: 768px) {
-            .discount-levels {
-                grid-template-columns: 1fr;
-                gap: 30px;
+            .threshold-card {
+                padding: 20px 15px;
+            }
+            
+            .threshold-amount {
+                font-size: 1.6em;
             }
             
             .discount-card {
@@ -251,13 +285,9 @@
                 font-size: 0.85em;
             }
             
-            .contact-notice {
-                font-size: 0.75em;
-                padding: 8px;
-            }
-            
-            .subtitle-text {
-                font-size: 0.8em;
+            .vat-info {
+                grid-template-columns: 1fr;
+                gap: 10px;
             }
             
             .input-grid {
@@ -290,13 +320,13 @@
         </div>
         
         <h1>Discount Calculator</h1>
-        <p class="subtitle">If discounts are necessary, use this for calculating the maximum discounts allowable for each product type.</p>
+        <p class="subtitle">Calculate the maximum discount allowable for each product type.</p>
         
         <div class="calculator-section">
             <div class="input-grid">
                 <div class="input-group">
                     <label for="blindType">Blind Type</label>
-                    <select id="blindType" onchange="updateMarginInfo()">
+                    <select id="blindType" onchange="updateThresholds()">
                         <option value="fauxwoods" data-margin="65">Fauxwoods</option>
                         <option value="sherwood" data-margin="62">Sherwood</option>
                         <option value="bamboo" data-margin="62">Bamboo</option>
@@ -324,76 +354,58 @@
                 </div>
             </div>
             
-            <button class="calculate-btn" onclick="calculateMaxDiscount()">Calculate Discount Authorization</button>
+            <button class="calculate-btn" onclick="calculateDiscount()">Calculate Discount Authorization</button>
+        </div>
+        
+        <div class="threshold-section">
+            <h2>5% Discount Threshold for <span id="selectedBlindType">Fauxwoods</span></h2>
+            <div style="max-width: 400px; margin: 0 auto;">
+                <div class="threshold-card threshold-5">
+                    <h3 style="margin-bottom: 15px; color: #27ae60;">✅ 5% Discount Available</h3>
+                    <p style="margin-bottom: 10px; font-size: 0.9em;">Orders of:</p>
+                    <div class="threshold-amount" id="threshold5">£0</div>
+                    <p style="font-size: 0.85em; color: #666;">and above</p>
+                </div>
+            </div>
         </div>
         
         <div id="results" class="results" style="display: none;">
-            <h2>Discount Authorization Levels</h2>
+            <h2>Maximum Allowable Discount</h2>
             
-            <div class="discount-levels">
-                <div class="discount-card standard-card">
-                    <h3 style="margin-bottom: 15px; color: #27ae60;">✅ Standard Discount</h3>
-                    <div class="discount-amount" id="standardDiscountAmount">£0.00</div>
-                    <div class="discount-percentage" id="standardDiscountPercent">0%</div>
-                    <div class="price-summary">
-                        <div class="price-line">
-                            <span>Original Price:</span>
-                            <span id="standardOriginalPrice">£0.00 (Inc VAT)</span>
-                        </div>
-                        <div class="price-line">
-                            <span>Discount:</span>
-                            <span id="standardDiscountDisplay">£0.00</span>
-                        </div>
-                        <div class="price-line">
-                            <span>Final Price:</span>
-                            <span id="standardFinalPrice">£0.00 (Inc VAT)</span>
-                        </div>
+            <div class="discount-card">
+                <h3 style="margin-bottom: 15px; color: #27ae60;" id="discountTitle">✅ Standard Discount (Max 5%)</h3>
+                <div class="discount-amount" id="discountAmount">£0.00</div>
+                <div class="discount-percentage" id="discountPercent">0%</div>
+                <div class="price-summary">
+                    <div class="price-line">
+                        <span>Original Price:</span>
+                        <span id="originalPrice">£0.00 (Inc VAT)</span>
                     </div>
-                </div>
-                
-                <div class="discount-card maximum-card">
-                    <h3 style="margin-bottom: 15px; color: #e67e22;">⚠️ Maximum Discount</h3>
-                    <p class="subtitle-text">Only if required to close the sale</p>
-                    <div class="discount-amount" id="maxDiscountAmount">£0.00</div>
-                    <div class="discount-percentage" id="maxDiscountPercent">0%</div>
-                    <div class="price-summary">
-                        <div class="price-line">
-                            <span>Original Price:</span>
-                            <span id="maxOriginalPrice">£0.00 (Inc VAT)</span>
-                        </div>
-                        <div class="price-line">
-                            <span>Discount:</span>
-                            <span id="maxDiscountDisplay">£0.00</span>
-                        </div>
-                        <div class="price-line">
-                            <span>Final Price:</span>
-                            <span id="maxFinalPrice">£0.00 (Inc VAT)</span>
-                        </div>
+                    <div class="price-line">
+                        <span>Discount:</span>
+                        <span id="discountDisplay">£0.00</span>
                     </div>
-                    <div class="contact-notice">
-                        Contact Adam for anything more than this
+                    <div class="price-line">
+                        <span>Final Price:</span>
+                        <span id="finalPrice">£0.00 (Inc VAT)</span>
                     </div>
                 </div>
             </div>
             
-            <div style="background: rgba(255, 255, 255, 0.15); padding: 20px; border-radius: 12px; margin-top: 20px;">
-                <h4 style="margin-bottom: 15px; text-align: center;">VAT Breakdown</h4>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; font-size: 0.9em;">
+            <div class="vat-breakdown">
+                <h4>VAT Breakdown</h4>
+                <div class="vat-info">
                     <div>
-                        <strong>Standard Discount:</strong><br>
-                        <span id="standardDiscountExVAT">£0.00</span><br>
-                        <strong>Final Price:</strong><br>
-                        <span id="standardFinalPriceExVAT">£0.00</span>
+                        <strong>Original Price (Ex VAT):</strong><br>
+                        <span id="originalPriceExVAT">£0.00</span>
                     </div>
                     <div>
-                        <strong>Maximum Discount:</strong><br>
-                        <span id="maxDiscountExVAT">£0.00</span><br>
-                        <strong>Final Price:</strong><br>
-                        <span id="maxFinalPriceExVAT">£0.00</span>
+                        <strong>Discount (Ex VAT):</strong><br>
+                        <span id="discountExVAT">£0.00</span>
                     </div>
                 </div>
-                <div style="text-align: center; margin-top: 10px; font-size: 0.85em; opacity: 0.8;">
-                    <strong>Original Price (Ex VAT):</strong> <span id="originalPriceExVAT">£0.00</span>
+                <div style="text-align: center; margin-top: 15px;">
+                    <strong>Final Price (Ex VAT):</strong> <span id="finalPriceExVAT">£0.00</span>
                 </div>
             </div>
             
@@ -404,14 +416,48 @@
     </div>
 
     <script>
-        function updateMarginInfo() {
-            // Recalculate if there's already a price entered
+        function calculateThresholds(margin) {
+            // Fixed values
+            const commission = 0.05; // 5% fixed
+            const fixedCosts = 460; // £460 fixed
+            const minProfit = 100; // £100 fixed
+            const vatRate = 0.2; // 20% VAT
+            
+            const costPercentage = (100 - margin) / 100;
+            const fixedCostsPlusProfit = fixedCosts + minProfit;
+            
+            // Calculate minimum selling price (ex VAT) for 5% discount
+            const discount5Factor = (1 - 0.05) * (1 - commission); // 0.9025
+            const denominator5 = discount5Factor - costPercentage;
+            
+            let threshold5 = 0;
+            
+            if (denominator5 > 0) {
+                const minPrice5ExVAT = fixedCostsPlusProfit / denominator5;
+                const minPrice5IncVAT = minPrice5ExVAT * (1 + vatRate);
+                threshold5 = Math.ceil(minPrice5IncVAT / 100) * 100; // Round up to nearest £100
+            }
+            
+            return { threshold5 };
+        }
+        
+        function updateThresholds() {
+            const blindType = document.getElementById('blindType');
+            const margin = parseFloat(blindType.options[blindType.selectedIndex].getAttribute('data-margin'));
+            const blindTypeName = blindType.options[blindType.selectedIndex].text;
+            
+            const thresholds = calculateThresholds(margin);
+            
+            document.getElementById('selectedBlindType').textContent = blindTypeName;
+            document.getElementById('threshold5').textContent = `£${thresholds.threshold5.toLocaleString()}`;
+            
+            // Recalculate discount if there's already a price entered
             if (document.getElementById('sellingPrice').value) {
-                calculateMaxDiscount();
+                calculateDiscount();
             }
         }
         
-        function calculateMaxDiscount() {
+        function calculateDiscount() {
             const sellingPriceIncVAT = parseFloat(document.getElementById('sellingPrice').value);
             const blindType = document.getElementById('blindType');
             const margin = parseFloat(blindType.options[blindType.selectedIndex].getAttribute('data-margin'));
@@ -421,10 +467,23 @@
             const fixedCosts = 460; // £460 fixed
             const minProfit = 100; // £100 fixed
             const vatRate = 0.2; // 20% VAT
+            const maxDiscountPercent = 0.05; // 5% maximum discount
             
             if (isNaN(sellingPriceIncVAT) || sellingPriceIncVAT <= 0) {
                 alert('Please enter a valid selling price');
                 return;
+            }
+            
+            // Calculate threshold to determine if discount is available
+            const thresholds = calculateThresholds(margin);
+            
+            // Determine if discount is available
+            let discountTitle = "No Discount Available";
+            let allowDiscount = false;
+            
+            if (sellingPriceIncVAT >= thresholds.threshold5) {
+                discountTitle = "✅ 5% Discount Available";
+                allowDiscount = true;
             }
             
             // Convert to VAT-exclusive for calculations
@@ -440,42 +499,34 @@
             // Calculate maximum discount (business logic) - ex VAT
             const maxDiscountBusinessExVAT = Math.max(0, sellingPriceExVAT - minRevenue);
             
-            // Apply caps for both levels (ex VAT)
-            const standardDiscountExVAT = Math.min(maxDiscountBusinessExVAT, sellingPriceExVAT * 0.05); // 5% cap
-            const maxDiscountExVAT = Math.min(maxDiscountBusinessExVAT, sellingPriceExVAT * 0.10); // 10% cap
+            // Apply discount only if threshold is met
+            let discountExVAT = 0;
+            if (allowDiscount) {
+                discountExVAT = Math.min(maxDiscountBusinessExVAT, sellingPriceExVAT * maxDiscountPercent);
+            }
             
-            // Convert discounts to include VAT
-            const standardDiscountIncVAT = standardDiscountExVAT * (1 + vatRate);
-            const maxDiscountIncVAT = maxDiscountExVAT * (1 + vatRate);
+            // Convert discount to include VAT
+            const discountIncVAT = discountExVAT * (1 + vatRate);
             
-            // Calculate percentages (based on inc VAT prices)
-            const standardDiscountPercent = (standardDiscountIncVAT / sellingPriceIncVAT) * 100;
-            const maxDiscountPercent = (maxDiscountIncVAT / sellingPriceIncVAT) * 100;
+            // Calculate percentage (based on inc VAT prices)
+            const discountPercent = sellingPriceIncVAT > 0 ? (discountIncVAT / sellingPriceIncVAT) * 100 : 0;
             
             // Calculate final prices
-            const standardFinalPriceIncVAT = sellingPriceIncVAT - standardDiscountIncVAT;
-            const maxFinalPriceIncVAT = sellingPriceIncVAT - maxDiscountIncVAT;
+            const finalPriceIncVAT = sellingPriceIncVAT - discountIncVAT;
+            const finalPriceExVAT = sellingPriceExVAT - discountExVAT;
             
-            // Update Standard Discount section
-            document.getElementById('standardDiscountAmount').textContent = `£${standardDiscountIncVAT.toFixed(2)}`;
-            document.getElementById('standardDiscountPercent').textContent = `${standardDiscountPercent.toFixed(1)}%`;
-            document.getElementById('standardOriginalPrice').textContent = `£${sellingPriceIncVAT.toFixed(2)} (Inc VAT)`;
-            document.getElementById('standardDiscountDisplay').textContent = `£${standardDiscountIncVAT.toFixed(2)}`;
-            document.getElementById('standardFinalPrice').textContent = `£${standardFinalPriceIncVAT.toFixed(2)} (Inc VAT)`;
+            // Update discount section
+            document.getElementById('discountTitle').innerHTML = discountTitle;
+            document.getElementById('discountAmount').textContent = `£${discountIncVAT.toFixed(2)}`;
+            document.getElementById('discountPercent').textContent = `${discountPercent.toFixed(1)}%`;
+            document.getElementById('originalPrice').textContent = `£${sellingPriceIncVAT.toFixed(2)}`;
+            document.getElementById('discountDisplay').textContent = `£${discountIncVAT.toFixed(2)}`;
+            document.getElementById('finalPrice').textContent = `£${finalPriceIncVAT.toFixed(2)}`;
             
-            // Update Maximum Discount section
-            document.getElementById('maxDiscountAmount').textContent = `£${maxDiscountIncVAT.toFixed(2)}`;
-            document.getElementById('maxDiscountPercent').textContent = `${maxDiscountPercent.toFixed(1)}%`;
-            document.getElementById('maxOriginalPrice').textContent = `£${sellingPriceIncVAT.toFixed(2)} (Inc VAT)`;
-            document.getElementById('maxDiscountDisplay').textContent = `£${maxDiscountIncVAT.toFixed(2)}`;
-            document.getElementById('maxFinalPrice').textContent = `£${maxFinalPriceIncVAT.toFixed(2)} (Inc VAT)`;
-            
-            // Add ex VAT breakdown
-            document.getElementById('originalPriceExVAT').textContent = `£${sellingPriceExVAT.toFixed(2)} (Ex VAT)`;
-            document.getElementById('standardDiscountExVAT').textContent = `£${standardDiscountExVAT.toFixed(2)} (Ex VAT)`;
-            document.getElementById('maxDiscountExVAT').textContent = `£${maxDiscountExVAT.toFixed(2)} (Ex VAT)`;
-            document.getElementById('standardFinalPriceExVAT').textContent = `£${(sellingPriceExVAT - standardDiscountExVAT).toFixed(2)} (Ex VAT)`;
-            document.getElementById('maxFinalPriceExVAT').textContent = `£${(sellingPriceExVAT - maxDiscountExVAT).toFixed(2)} (Ex VAT)`;
+            // Update VAT breakdown
+            document.getElementById('originalPriceExVAT').textContent = `£${sellingPriceExVAT.toFixed(2)}`;
+            document.getElementById('discountExVAT').textContent = `£${discountExVAT.toFixed(2)}`;
+            document.getElementById('finalPriceExVAT').textContent = `£${finalPriceExVAT.toFixed(2)}`;
             
             // Show warning if order would be unprofitable
             const warningDiv = document.getElementById('warning');
@@ -488,12 +539,12 @@
             document.getElementById('results').style.display = 'block';
         }
         
-        // Initialize margin info
-        updateMarginInfo();
+        // Initialize thresholds on page load
+        updateThresholds();
         
         // Add event listeners for real-time calculation
         document.getElementById('sellingPrice').addEventListener('input', function() {
-            if (this.value) calculateMaxDiscount();
+            if (this.value) calculateDiscount();
         });
     </script>
 </body>
