@@ -28,6 +28,18 @@
             box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
         }
         
+        .logo-section {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 15px 0;
+        }
+        
+        .company-logo {
+            max-height: 80px;
+            width: auto;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+        }
+        
         h1 {
             text-align: center;
             color: #2c3e50;
@@ -129,31 +141,7 @@
         
 
         
-        .breakdown {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-        
-        .breakdown-item {
-            background: rgba(255, 255, 255, 0.15);
-            padding: 18px;
-            border-radius: 12px;
-            backdrop-filter: blur(10px);
-            text-align: center;
-        }
-        
-        .breakdown-item strong {
-            display: block;
-            font-size: 1.1em;
-            margin-bottom: 8px;
-        }
-        
-        .breakdown-item span {
-            font-size: 1.3em;
-            font-weight: 600;
-        }
+
         
         .warning {
             background: rgba(255, 107, 107, 0.2);
@@ -234,8 +222,19 @@
                     <h3 style="margin-bottom: 15px; color: #27ae60;">✅ Standard Discount</h3>
                     <div class="discount-amount" id="standardDiscountAmount">£0.00</div>
                     <div class="discount-percentage" id="standardDiscountPercent">0%</div>
-                    <div class="final-price-box">
-                        <strong>Final Price: <span id="standardFinalPrice">£0.00</span></strong>
+                    <div class="price-summary">
+                        <div class="price-line">
+                            <span>Original Price:</span>
+                            <span id="standardOriginalPrice">£0.00 (Inc VAT)</span>
+                        </div>
+                        <div class="price-line">
+                            <span>Discount:</span>
+                            <span id="standardDiscountDisplay">£0.00</span>
+                        </div>
+                        <div class="price-line">
+                            <span>Final Price:</span>
+                            <span id="standardFinalPrice">£0.00 (Inc VAT)</span>
+                        </div>
                     </div>
                 </div>
                 
@@ -244,20 +243,23 @@
                     <p class="subtitle-text">Only if required to close the sale</p>
                     <div class="discount-amount" id="maxDiscountAmount">£0.00</div>
                     <div class="discount-percentage" id="maxDiscountPercent">0%</div>
-                    <div class="final-price-box" style="margin-bottom: 12px;">
-                        <strong>Final Price: <span id="maxFinalPrice">£0.00</span></strong>
+                    <div class="price-summary">
+                        <div class="price-line">
+                            <span>Original Price:</span>
+                            <span id="maxOriginalPrice">£0.00 (Inc VAT)</span>
+                        </div>
+                        <div class="price-line">
+                            <span>Discount:</span>
+                            <span id="maxDiscountDisplay">£0.00</span>
+                        </div>
+                        <div class="price-line">
+                            <span>Final Price:</span>
+                            <span id="maxFinalPrice">£0.00 (Inc VAT)</span>
+                        </div>
                     </div>
                     <div class="contact-notice">
                         Contact Adam for anything more than this
                     </div>
-                </div>
-            </div>
-            
-            <div class="breakdown">
-                <div class="breakdown-item">
-                    <strong>Original Price</strong>
-                    <span id="originalPrice">£0.00</span><br>
-                    <small><span id="originalPriceExVAT">£0.00</span></small>
                 </div>
             </div>
             
@@ -276,6 +278,9 @@
                         <strong>Final Price:</strong><br>
                         <span id="maxFinalPriceExVAT">£0.00</span>
                     </div>
+                </div>
+                <div style="text-align: center; margin-top: 10px; font-size: 0.85em; opacity: 0.8;">
+                    <strong>Original Price (Ex VAT):</strong> <span id="originalPriceExVAT">£0.00</span>
                 </div>
             </div>
             
@@ -335,28 +340,29 @@
             const maxDiscountPercent = (maxDiscountIncVAT / sellingPriceIncVAT) * 100;
             
             // Calculate final prices
-            const standardFinalPriceExVAT = sellingPriceExVAT - standardDiscountExVAT;
             const standardFinalPriceIncVAT = sellingPriceIncVAT - standardDiscountIncVAT;
-            const maxFinalPriceExVAT = sellingPriceExVAT - maxDiscountExVAT;
             const maxFinalPriceIncVAT = sellingPriceIncVAT - maxDiscountIncVAT;
             
-            // Update UI
+            // Update Standard Discount section
             document.getElementById('standardDiscountAmount').textContent = `£${standardDiscountIncVAT.toFixed(2)}`;
             document.getElementById('standardDiscountPercent').textContent = `${standardDiscountPercent.toFixed(1)}%`;
+            document.getElementById('standardOriginalPrice').textContent = `£${sellingPriceIncVAT.toFixed(2)} (Inc VAT)`;
+            document.getElementById('standardDiscountDisplay').textContent = `£${standardDiscountIncVAT.toFixed(2)}`;
             document.getElementById('standardFinalPrice').textContent = `£${standardFinalPriceIncVAT.toFixed(2)} (Inc VAT)`;
             
+            // Update Maximum Discount section
             document.getElementById('maxDiscountAmount').textContent = `£${maxDiscountIncVAT.toFixed(2)}`;
             document.getElementById('maxDiscountPercent').textContent = `${maxDiscountPercent.toFixed(1)}%`;
+            document.getElementById('maxOriginalPrice').textContent = `£${sellingPriceIncVAT.toFixed(2)} (Inc VAT)`;
+            document.getElementById('maxDiscountDisplay').textContent = `£${maxDiscountIncVAT.toFixed(2)}`;
             document.getElementById('maxFinalPrice').textContent = `£${maxFinalPriceIncVAT.toFixed(2)} (Inc VAT)`;
-            
-            document.getElementById('originalPrice').textContent = `£${sellingPriceIncVAT.toFixed(2)} (Inc VAT)`;
             
             // Add ex VAT breakdown
             document.getElementById('originalPriceExVAT').textContent = `£${sellingPriceExVAT.toFixed(2)} (Ex VAT)`;
             document.getElementById('standardDiscountExVAT').textContent = `£${standardDiscountExVAT.toFixed(2)} (Ex VAT)`;
             document.getElementById('maxDiscountExVAT').textContent = `£${maxDiscountExVAT.toFixed(2)} (Ex VAT)`;
-            document.getElementById('standardFinalPriceExVAT').textContent = `£${standardFinalPriceExVAT.toFixed(2)} (Ex VAT)`;
-            document.getElementById('maxFinalPriceExVAT').textContent = `£${maxFinalPriceExVAT.toFixed(2)} (Ex VAT)`;
+            document.getElementById('standardFinalPriceExVAT').textContent = `£${(sellingPriceExVAT - standardDiscountExVAT).toFixed(2)} (Ex VAT)`;
+            document.getElementById('maxFinalPriceExVAT').textContent = `£${(sellingPriceExVAT - maxDiscountExVAT).toFixed(2)} (Ex VAT)`;
             
             // Show warning if order would be unprofitable
             const warningDiv = document.getElementById('warning');
